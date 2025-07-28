@@ -183,26 +183,26 @@
       <select id="teamName2">
       <option value="Maca Black">Maca Black</option>
       <option value="Tadala Blue">Tadala Blue</option>
-      <option value="Yellow Submarine">Yellow Submarine</option>
       <option value="Red Menstruation">Red Menstruation</option>
+      <option value="Yellow Submarine">Yellow Submarine</option>
       </select>
       <input id="teamSize2" min="0" style="width:60px; margin-left: 10px;" type="number" value="2"/>
     </div>
       <div id="teamGroup3" style="display: flex; align-items: center; margin-bottom: 5px;">
       <select id="teamName3">
-      <option value="Yellow Submarine">Yellow Submarine</option>
+      <option value="Red Menstruation">Red Menstruation</option>
       <option value="Tadala Blue">Tadala Blue</option>
       <option value="Maca Black">Maca Black</option>
-      <option value="Red Menstruation">Red Menstruation</option>
+      <option value="Yellow Submarine">Yellow Submarine</option>
       </select>
       <input id="teamSize3" min="0" style="width:60px; margin-left: 10px;" type="number" value="3"/>
     </div>
       <div id="teamGroup4" style="display: flex; align-items: center; margin-bottom: 5px;">
       <select id="teamName4">
-      <option value="Red Menstruation">Red Menstruation</option>
+      <option value="Yellow Submarine">Yellow Submarine</option>
       <option value="Tadala Blue">Tadala Blue</option>
       <option value="Maca Black">Maca Black</option>
-      <option value="Yellow Submarine">Yellow Substation</option>
+      <option value="Red Menstruation">Red Menstruation</option>
       </select>
       <input id="teamSize4" min="0" style="width:60px; margin-left: 10px;" type="number" value="4"/>
     </div>
@@ -425,7 +425,7 @@
       }
 
       const numTeams = parseInt(document.querySelector('input[name="teams"]:checked').value);
-      const playersPerTeam = 8; // Valor padrão fixo para jogadores por time (você pode mudar para 9 aqui)
+      const playersPerTeam = 7; // Valor padrão fixo para jogadores por time (você pode mudar para 8 aqui)
 
       if (selectedPlayers.length < numTeams * playersPerTeam) {
         alert(`O número de jogadores selecionados (${selectedPlayers.length}) é insuficiente para formar ${numTeams} times de ${playersPerTeam} jogadores cada.`);
@@ -434,10 +434,10 @@
 
       // Define a ordem de posição baseada na quantidade de jogadores por time
       let positionOrderSchema;
-      if (playersPerTeam === 8) { //
+      if (playersPerTeam === 7) { //
+        positionOrderSchema = ["Goleiro", "Zagueiro", "Zagueiro", "Lateral", "Lateral", "Meio", "Ataque"]; //
+      } else if (playersPerTeam === 8) { //
         positionOrderSchema = ["Goleiro", "Zagueiro", "Zagueiro", "Lateral", "Lateral", "Meio", "Meio", "Ataque"]; //
-      } else if (playersPerTeam === 9) { //
-        positionOrderSchema = ["Goleiro", "Zagueiro", "Zagueiro", "Lateral", "Lateral", "Meio", "Meio", "Ataque", "Ataque"]; //
       } else {
           alert("Erro: Tamanho de time inválido configurado internamente.");
           return;
