@@ -165,7 +165,7 @@
       reader.onload = function (event) {
         const lines = event.target.result.trim().split('\n');
         const jogadores = lines.slice(1).map(line => {
-          const [nome, nivel, posicao, idade] = line.split(';');
+          const [nome, posicao, idade] = line.split(';');
           return {
             nome: nome.trim(),
             nivel: nivel?.trim(),
