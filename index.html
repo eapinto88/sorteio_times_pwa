@@ -148,19 +148,19 @@
     </div>
       <div id="teamGroup3" style="display: flex; align-items: center; margin-bottom: 5px;">
       <select id="teamName3">
-      <option value="Yellow Submarine">Yellow Submarine</option>
+      <option value="Yellow Submarine">Red Menstruation</option>
       <option value="Tadala Blue">Tadala Blue</option>
       <option value="Maca Black">Maca Black</option>
-      <option value="Red Menstruation">Red Menstruation</option>
+      <option value="Red Menstruation">Yellow Submarine</option>
       </select>
       <input id="teamSize3" min="0" style="width:60px; margin-left: 10px;" type="number" value="3"/>
     </div>
       <div id="teamGroup4" style="display: flex; align-items: center; margin-bottom: 5px;">
       <select id="teamName4">
-      <option value="Red Menstruation">Red Menstruation</option>
+      <option value="Red Menstruation">Yellow Submarine</option>
       <option value="Tadala Blue">Tadala Blue</option>
       <option value="Maca Black">Maca Black</option>
-      <option value="Yellow Submarine">Yellow Substation</option>
+      <option value="Yellow Submarine">Red Menstruation</option>
       </select>
       <input id="teamSize4" min="0" style="width:60px; margin-left: 10px;" type="number" value="4"/>
     </div>
@@ -174,14 +174,6 @@
   </div>
   
   <script>
-
-	  function shuffleArray(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-}
-
     document.addEventListener('DOMContentLoaded', (event) => {
         const tituloElemento = document.getElementById('tituloComData');
         const hoje = new Date();
@@ -383,9 +375,7 @@
       }
     }
 
-    function sortTeams() 
-    shuffleArray(selectedPlayers); 
-                               {
+    function sortTeams() {
       const selectedPlayers = getSelectedPlayers();
       if (selectedPlayers.length === 0) {
         alert("Selecione pelo menos um jogador para o sorteio.");
