@@ -425,7 +425,7 @@
       }
 
       const numTeams = parseInt(document.querySelector('input[name="teams"]:checked').value);
-      const playersPerTeam = 8; // Valor padrão fixo para jogadores por time (você pode mudar para 9 aqui)
+      const playersPerTeam = 7; // Valor padrão fixo para jogadores por time (você pode mudar para 9 aqui)
 
       if (selectedPlayers.length < numTeams * playersPerTeam) {
         alert(`O número de jogadores selecionados (${selectedPlayers.length}) é insuficiente para formar ${numTeams} times de ${playersPerTeam} jogadores cada.`);
