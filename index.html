@@ -154,32 +154,39 @@
     }
 
     function processarCSV() {
-      const fileInput = document.getElementById('csvInput');
-      const file = fileInput.files[0];
-      if (!file) {
-        alert("Por favor, selecione um arquivo CSV.");
-        return;
-      }
+  const fileInput = document.getElementById('csvInput');
+  const file = fileInput.files[0];
+  if (!file) {
+    alert("Por favor, selecione um arquivo CSV.");
+    return;
+  }
 
-      const reader = new FileReader();
-      reader.onload = function (event) {
-        const lines = event.target.result.trim().split('\n');
-        const jogadores = lines.slice(1).map(line => {
-          const [nome, posicao, ano] = line.split(',');
-          return {
-            nome: nome.trim(),
-            posicao: posicao?.trim(),
-            ano: ano?.trim()
-          };
-        });
+  const reader = new FileReader();
+  reader.onload = function (event) {
+    const lines = event.target.result.trim().split('\n');
+    
+    const jogadores = lines.slice(1).map(line => {
+      // Regex para dividir campos CSV mesmo se estiverem entre aspas
+      const campos = line.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
 
-        const numTimes = parseInt(document.querySelector('input[name="numTimes"]:checked').value);
-        const times = sortearTimesEquilibrados(jogadores, numTimes);
-        exibirTimes(times);
+      const nome = campos[0]?.replace(/^"|"$/g, '').trim();
+      const posicao = campos[1]?.replace(/^"|"$/g, '').trim();
+      const ano = campos[2]?.replace(/^"|"$/g, '').trim();
+
+      return {
+        nome,
+        posicao,
+        ano
       };
+    });
 
-      reader.readAsText(file);
-    }
+    const numTimes = parseInt(document.querySelector('input[name="numTimes"]:checked').value);
+    const times = sortearTimesEquilibrados(jogadores, numTimes);
+    exibirTimes(times);
+  };
+
+  reader.readAsText(file);
+}
 
     function exibirTimes(times) {
       const resultadoDiv = document.getElementById('timesResultado');
