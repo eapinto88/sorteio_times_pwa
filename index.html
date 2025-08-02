@@ -383,12 +383,9 @@
       }
     }
 
-    function sortTeams()
-	  
-    shuffleArray(selectedPlayers);
-    
-                               {
+    function sortTeams() {
       const selectedPlayers = getSelectedPlayers();
+      shuffleArray(selectedPlayers);
       if (selectedPlayers.length === 0) {
         alert("Selecione pelo menos um jogador para o sorteio.");
         return;
