@@ -1,20 +1,22 @@
+
 {
-  "name": "Sorteio Futebol Arte",
-  "short_name": "Sorteio Times Vila Avaí",
-  "start_url": "./",
+  "name": "Sorteio de Times",
+  "short_name": "Sortear Times",
+  "start_url": ".",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#006400",
+  "background_color": "#f2f2f2",
+  "theme_color": "#000099",
   "icons": [
     {
-      "src": "icon-campo-192.png",
+      "src": "icon-192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "icon-campo-512.png",
+      "src": "icon-512.png",
       "sizes": "512x512",
       "type": "image/png"
     }
   ]
 }
+
