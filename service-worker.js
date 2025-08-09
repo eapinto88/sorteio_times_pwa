@@ -8,6 +8,8 @@ self.addEventListener('install', function (event) {
         './manifest.json',
         './icon-192.png',
         './icon-512.png'
+        './campo-fundo.png',
+        './logo.png'
       ]);
     })
   );
