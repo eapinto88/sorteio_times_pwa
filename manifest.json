@@ -2,7 +2,7 @@
 {
   "name": "Sorteio de Times",
   "short_name": "Sortear Times",
-  "start_url": ".",
+  "start_url": "/sorteio_times_pwa/",
   "display": "standalone",
   "background_color": "#f2f2f2",
   "theme_color": "#000099",
