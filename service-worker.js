@@ -1,7 +1,22 @@
-self.addEventListener('install', function (e) {
-  console.log('Service Worker instalado');
+
+self.addEventListener('install', function (event) {
+  event.waitUntil(
+    caches.open('sorteio-cache-v1').then(function (cache) {
+      return cache.addAll([
+        './',
+        './index.html',
+        './manifest.json',
+        './icon-192.png',
+        './icon-512.png'
+      ]);
+    })
+  );
 });
 
-self.addEventListener('fetch', function (e) {
-  // Deixe o navegador lidar com as requisições normalmente
+self.addEventListener('fetch', function (event) {
+  event.respondWith(
+    caches.match(event.request).then(function (response) {
+      return response || fetch(event.request);
+    })
+  );
 });
