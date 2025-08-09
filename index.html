@@ -3,11 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sortear Times</title>
+  <title>Sortear Times - Futebol Arte</title>
+  <meta name="description" content="Aplicativo para sortear times de futebol de forma balanceada">
 
-  <!-- PWA -->
-  <link rel="manifest" href="manifest.json">
+  <!-- PWA Meta Tags -->
+  <link rel="manifest" href="./manifest.json">
   <meta name="theme-color" content="#000099">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Sortear Times">
+  <link rel="apple-touch-icon" href="./icon-192.png">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" sizes="32x32" href="./icon-192.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="./icon-192.png">
 
   <style>
     body {
@@ -30,115 +39,189 @@
     .remove-player { cursor: pointer; color: red; font-weight: bold; margin-left: 10px; }
     .import-btn { background-color: #196B24; }
     input[type="text"] { padding: 5px; margin-top: 5px; box-sizing: border-box; border-radius: 3px; border: 1px solid #ccc; }
+    
+    /* Install prompt styles */
+    .install-prompt {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #000099;
+      color: white;
+      padding: 15px 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      display: none;
+      z-index: 1000;
+      text-align: center;
+    }
+    .install-prompt button {
+      background: white;
+      color: #000099;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      margin: 0 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
-  <!-- Conteúdo original do app -->
-  
+  <!-- Install Prompt -->
+  <div id="installPrompt" class="install-prompt">
+    <p>📱 Instalar Sortear Times no seu dispositivo?</p>
+    <button onclick="installApp()">Instalar</button>
+    <button onclick="dismissInstallPrompt()">Agora não</button>
+  </div>
+
   <div class="container">
-    
-  <div id="logo-container" style="display: flex; justify-content: center; align-items: center; width: 500px; height: 100px; margin-bottom: 10px;">
-      <img src="logo.png" alt="Logo" style="max-width: 100%; max-height:130%;">
-  </div>
-	
-      <h1 id="tituloComData">Sorteio Futebol Arte domingo às 8:00 na vila avaí</h1>
+    <div id="logo-container" style="display: flex; justify-content: center; align-items: center; width: 500px; height: 100px; margin-bottom: 10px;">
+        <img src="logo.png" alt="Logo Futebol Arte" style="max-width: 100%; max-height:130%;">
+    </div>
+      
+        <h1 id="tituloComData">Sorteio Futebol Arte domingo às 8:00 na vila avaí</h1>
 
-    <div class="player-input">
-      <input type="text" id="playerName" placeholder="Nome do jogador" />
-      <select id="playerPosition">
-        <option value="Goleiro">GOL</option>
-        <option value="Zagueiro">ZAG</option>
-        <option value="Lateral">LAT</option>
-        <option value="Meio">MEI</option>
-        <option value="Ataque">ATA</option>
-      </select>
-      <input type="number" id="playerBirthYear" placeholder="Ano Nasc." min="1950" max="2025" />
-    </div>
-    <button onclick="addPlayer()">Adicionar Novo Jogador</button>
+      <div class="player-input">
+        <input type="text" id="playerName" placeholder="Nome do jogador" />
+        <select id="playerPosition">
+          <option value="Goleiro">GOL</option>
+          <option value="Zagueiro">ZAG</option>
+          <option value="Lateral">LAT</option>
+          <option value="Meio">MEI</option>
+          <option value="Ataque">ATA</option>
+        </select>
+        <input type="number" id="playerBirthYear" placeholder="Ano Nasc." min="1950" max="2025" />
+      </div>
+      <button onclick="addPlayer()">Adicionar Novo Jogador</button>
 
-    <input type="file" id="csvFileInput" accept=".csv" style="display: none;">
-    <button class="import-btn" onclick="document.getElementById('csvFileInput').click()">Importar de Arquivo (CSV)</button>
+      <input type="file" id="csvFileInput" accept=".csv" style="display: none;">
+      <button class="import-btn" onclick="document.getElementById('csvFileInput').click()">Importar de Arquivo (CSV)</button>
 
-    <hr style="margin: 20px 0;">
+      <hr style="margin: 20px 0;">
 
-    <h3 id="playerTitle">Selecione os Jogadores Presentes:</h3>
-    <div id="selectedCount" style="font-weight: bold; margin-bottom: 10px;">Selecionados: 0 jogadores</div>
-    <ul id="playerList"></ul>
-    <div style="display: flex; gap: 10px;">
-      <button onclick="selectAllPlayers()" style="flex: 1; background-color: #6c757d;">Selecionar Todos</button>
-      <button onclick="clearSelection()" style="flex: 1; background-color: #6c757d;">Limpar Todos</button>
-      <button onclick="deleteAllPlayers()" style="flex: 1; background-color: #6c757d;">Excluir Todos</button>
+      <h3 id="playerTitle">Selecione os Jogadores Presentes:</h3>
+      <div id="selectedCount" style="font-weight: bold; margin-bottom: 10px;">Selecionados: 0 jogadores</div>
+      <ul id="playerList"></ul>
+      <div style="display: flex; gap: 10px;">
+        <button onclick="selectAllPlayers()" style="flex: 1; background-color: #6c757d;">Selecionar Todos</button>
+        <button onclick="clearSelection()" style="flex: 1; background-color: #6c757d;">Limpar Todos</button>
+        <button onclick="deleteAllPlayers()" style="flex: 1; background-color: #6c757d;">Excluir Todos</button>
+      </div>
+
+      <div style="margin-top: 20px;">
+        <label>Quantidade de times:</label><br/>
+        <input type="radio" name="teams" value="2" checked /> 2
+        <input type="radio" name="teams" value="3" /> 3
+        <input type="radio" name="teams" value="4" /> 4
     </div>
 
-    <div style="margin-top: 20px;">
-      <label>Quantidade de times:</label><br/>
-      <input type="radio" name="teams" value="2" checked /> 2
-      <input type="radio" name="teams" value="3" /> 3
-      <input type="radio" name="teams" value="4" /> 4
-	</div>
+      <div style="margin-top: 20px;">
+        <label>Nome dos Times (opcional):</label><br/>
+        <div id="teamInputs">
+        <div id="teamGroup1" style="display: flex; align-items: center; margin-bottom: 5px;">
+      <select id="teamName1">
+        <option value="Tadala Blue">Tadala Blue</option>
+        <option value="Maca Black">Maca Black</option>
+        <option value="Yellow Submarine">Yellow Submarine</option>
+        <option value="Red Menstruation">Red Menstruation</option>
+        </select>
+        <input id="teamSize1" min="0" style="width:60px; margin-left: 10px;" type="number" value="1"/>
+      </div>
+        <div id="teamGroup2" style="display: flex; align-items: center; margin-bottom: 5px;">
+        <select id="teamName2">
+        <option value="Maca Black">Maca Black</option>
+        <option value="Tadala Blue">Tadala Blue</option>
+        <option value="Yellow Submarine">Yellow Submarine</option>
+        <option value="Red Menstruation">Red Menstruation</option>
+        </select>
+        <input id="teamSize2" min="0" style="width:60px; margin-left: 10px;" type="number" value="2"/>
+      </div>
+        <div id="teamGroup3" style="display: flex; align-items: center; margin-bottom: 5px;">
+        <select id="teamName3">
+        <option value="Yellow Submarine">Red Menstruation</option>
+        <option value="Tadala Blue">Tadala Blue</option>
+        <option value="Maca Black">Maca Black</option>
+        <option value="Red Menstruation">Yellow Submarine</option>
+        </select>
+        <input id="teamSize3" min="0" style="width:60px; margin-left: 10px;" type="number" value="3"/>
+      </div>
+        <div id="teamGroup4" style="display: flex; align-items: center; margin-bottom: 5px;">
+        <select id="teamName4">
+        <option value="Red Menstruation">Yellow Submarine</option>
+        <option value="Tadala Blue">Tadala Blue</option>
+        <option value="Maca Black">Maca Black</option>
+        <option value="Yellow Submarine">Red Menstruation</option>
+        </select>
+        <input id="teamSize4" min="0" style="width:60px; margin-left: 10px;" type="number" value="4"/>
+      </div>
+      </div>
+      </div>
+     
+      <button onclick="sortTeams()">Sortear Times</button>
+      <button class="share-btn" onclick="shareTeams()">Compartilhar no WhatsApp</button>
 
-    <div style="margin-top: 20px;">
-      <label>Nome dos Times (opcional):</label><br/>
-      <div id="teamInputs">
-      <div id="teamGroup1" style="display: flex; align-items: center; margin-bottom: 5px;">
-	  <select id="teamName1">
-      <option value="Tadala Blue">Tadala Blue</option>
-      <option value="Maca Black">Maca Black</option>
-      <option value="Yellow Submarine">Yellow Submarine</option>
-      <option value="Red Menstruation">Red Menstruation</option>
-      </select>
-      <input id="teamSize1" min="0" style="width:60px; margin-left: 10px;" type="number" value="1"/>
+      <div class="teams" id="teamsDisplay"></div>
     </div>
-      <div id="teamGroup2" style="display: flex; align-items: center; margin-bottom: 5px;">
-      <select id="teamName2">
-      <option value="Maca Black">Maca Black</option>
-      <option value="Tadala Blue">Tadala Blue</option>
-      <option value="Yellow Submarine">Yellow Submarine</option>
-      <option value="Red Menstruation">Red Menstruation</option>
-      </select>
-      <input id="teamSize2" min="0" style="width:60px; margin-left: 10px;" type="number" value="2"/>
-    </div>
-      <div id="teamGroup3" style="display: flex; align-items: center; margin-bottom: 5px;">
-      <select id="teamName3">
-      <option value="Yellow Submarine">Red Menstruation</option>
-      <option value="Tadala Blue">Tadala Blue</option>
-      <option value="Maca Black">Maca Black</option>
-      <option value="Red Menstruation">Yellow Submarine</option>
-      </select>
-      <input id="teamSize3" min="0" style="width:60px; margin-left: 10px;" type="number" value="3"/>
-    </div>
-      <div id="teamGroup4" style="display: flex; align-items: center; margin-bottom: 5px;">
-      <select id="teamName4">
-      <option value="Red Menstruation">Yellow Submarine</option>
-      <option value="Tadala Blue">Tadala Blue</option>
-      <option value="Maca Black">Maca Black</option>
-      <option value="Yellow Submarine">Red Menstruation</option>
-      </select>
-      <input id="teamSize4" min="0" style="width:60px; margin-left: 10px;" type="number" value="4"/>
-    </div>
-    </div>
-    </div>
-   
-    <button onclick="sortTeams()">Sortear Times</button>
-    <button class="share-btn" onclick="shareTeams()">Compartilhar no WhatsApp</button>
 
-    <div class="teams" id="teamsDisplay"></div>
-  </div>
-  
   <script>
+    // PWA Install functionality
+    let deferredPrompt;
+    let installPromptShown = localStorage.getItem('installPromptShown') === 'true';
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      console.log('beforeinstallprompt event fired');
+      // Prevent the mini-infobar from appearing on mobile
+      e.preventDefault();
+      // Stash the event so it can be triggered later
+      deferredPrompt = e;
+      
+      // Show install prompt if not shown before
+      if (!installPromptShown) {
+        showInstallPrompt();
+      }
+    });
+
+    function showInstallPrompt() {
+      document.getElementById('installPrompt').style.display = 'block';
+    }
+
+    function installApp() {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === 'accepted') {
+            console.log('User accepted the install prompt');
+          } else {
+            console.log('User dismissed the install prompt');
+          }
+          deferredPrompt = null;
+        });
+      }
+      dismissInstallPrompt();
+    }
+
+    function dismissInstallPrompt() {
+      document.getElementById('installPrompt').style.display = 'none';
+      localStorage.setItem('installPromptShown', 'true');
+      installPromptShown = true;
+    }
+
+    // Check if app is already installed
+    window.addEventListener('appinstalled', (evt) => {
+      console.log('App was installed');
+      dismissInstallPrompt();
+    });
+
+    // Update date in title
     document.addEventListener('DOMContentLoaded', (event) => {
         const tituloElemento = document.getElementById('tituloComData');
         const hoje = new Date();
         const dia = String(hoje.getDate()).padStart(2, '0');
-        const mes = String(hoje.getMonth() + 1).padStart(2, '0'); // Mês é 0-indexed, então adicione 1
+        const mes = String(hoje.getMonth() + 1).padStart(2, '0');
         const ano = hoje.getFullYear();
 
-        // Obtenha o texto original do título
         const textoOriginal = tituloElemento.textContent;
-
-        // Encontre a posição para inserir a data (por exemplo, após "Futebol Arte")
-        // Se o texto original for "Sorteio Futebol Arte domingo às 8:00 na vila avaí"
-        // Queremos inserir a data após "Arte".
         const parte1 = "Sorteio Futebol Arte";
         const parte2 = "domingo às 8:00 na vila avaí";
 
@@ -156,9 +239,9 @@
       radio.addEventListener('change', () => {
         const count = parseInt(radio.value);
         for (let i = 1; i <= 4; i++) {
-          const teamGroup = document.getElementById(`teamGroup${i}`); //
-          if (teamGroup) { //
-            teamGroup.style.display = i <= count ? 'flex' : 'none'; //
+          const teamGroup = document.getElementById(`teamGroup${i}`);
+          if (teamGroup) {
+            teamGroup.style.display = i <= count ? 'flex' : 'none';
           }
         }
       });
@@ -166,18 +249,17 @@
 
     // Chama a função de alteração ao carregar a página para garantir o estado inicial correto
     document.addEventListener('DOMContentLoaded', (event) => {
-        const initialRadio = document.querySelector('input[name="teams"]:checked'); //
-        if (initialRadio) { //
-            const count = parseInt(initialRadio.value); //
-            for (let i = 1; i <= 4; i++) { //
-                const teamGroup = document.getElementById(`teamGroup${i}`); //
-                if (teamGroup) { //
-                    teamGroup.style.display = i <= count ? 'flex' : 'none'; //
+        const initialRadio = document.querySelector('input[name="teams"]:checked');
+        if (initialRadio) {
+            const count = parseInt(initialRadio.value);
+            for (let i = 1; i <= 4; i++) {
+                const teamGroup = document.getElementById(`teamGroup${i}`);
+                if (teamGroup) {
+                    teamGroup.style.display = i <= count ? 'flex' : 'none';
                 }
             }
         }
     });
-
 
     function calculateAge(birthYear) {
       const currentYear = new Date().getFullYear();
@@ -335,111 +417,103 @@
       }
 
       const numTeams = parseInt(document.querySelector('input[name="teams"]:checked').value);
-      const playersPerTeam = 7; // Valor padrão fixo para jogadores por time (você pode mudar para 9 aqui)
+      const playersPerTeam = 7;
 
       if (selectedPlayers.length < numTeams * playersPerTeam) {
         alert(`O número de jogadores selecionados (${selectedPlayers.length}) é insuficiente para formar ${numTeams} times de ${playersPerTeam} jogadores cada.`);
         return;
       }
 
-      // Define a ordem de posição baseada na quantidade de jogadores por time
       let positionOrderSchema;
-      if (playersPerTeam === 7) { //
-        positionOrderSchema = ["Goleiro", "Zagueiro", "Zagueiro", "Lateral", "Lateral", "Meio", "Ataque"]; //
-      } else if (playersPerTeam === 8) { //
-        positionOrderSchema = ["Goleiro", "Zagueiro", "Zagueiro", "Lateral", "Lateral", "Meio", "Meio", "Ataque"]; //
+      if (playersPerTeam === 7) {
+        positionOrderSchema = ["Goleiro", "Zagueiro", "Zagueiro", "Lateral", "Lateral", "Meio", "Ataque"];
+      } else if (playersPerTeam === 8) {
+        positionOrderSchema = ["Goleiro", "Zagueiro", "Zagueiro", "Lateral", "Lateral", "Meio", "Meio", "Ataque"];
       } else {
           alert("Erro: Tamanho de time inválido configurado internamente.");
           return;
       }
 
-      const positionPriority = { //
-        "Goleiro": 1, //
-        "Zagueiro": 2, //
-        "Lateral": 3, //
-        "Meio": 4, //
-        "Ataque": 5 //
+      const positionPriority = {
+        "Goleiro": 1,
+        "Zagueiro": 2,
+        "Lateral": 3,
+        "Meio": 4,
+        "Ataque": 5
       };
 
-      let teams = Array.from({ length: numTeams }, () => []); //
+      let teams = Array.from({ length: numTeams }, () => []);
 
-      // Agrupamento de jogadores por posição e ordenação por idade
-      const playersByPosition = {}; //
-      for (const pos of Object.keys(positionPriority)) { //
-          playersByPosition[pos] = selectedPlayers.filter(p => p.position === pos) //
-                                                 .sort((a, b) => a.birthYear - b.birthYear); //
+      const playersByPosition = {};
+      for (const pos of Object.keys(positionPriority)) {
+          playersByPosition[pos] = selectedPlayers.filter(p => p.position === pos)
+                                                 .sort((a, b) => a.birthYear - b.birthYear);
       }
 
-      let playerAddedToTeam = new Set(); // Para controlar jogadores já adicionados
+      let playerAddedToTeam = new Set();
 
-      // Tenta distribuir os jogadores seguindo o esquema de posição
-      let currentTeamForSchema = 0; // Controla qual time está recebendo o jogador na rodada
-      for (let round = 0; round < playersPerTeam; round++) { // Rodadas para preencher cada posição do esquema
-          for (let i = 0; i < numTeams; i++) { // Iterar sobre o número de times
-              const teamToFill = (currentTeamForSchema + i) % numTeams; // Alterna o time de início
-              const requiredPosition = positionOrderSchema[round]; //
+      let currentTeamForSchema = 0;
+      for (let round = 0; round < playersPerTeam; round++) {
+          for (let i = 0; i < numTeams; i++) {
+              const teamToFill = (currentTeamForSchema + i) % numTeams;
+              const requiredPosition = positionOrderSchema[round];
 
-              let playerFound = false; //
-              // Procura um jogador para a posição específica da rodada que ainda não foi adicionado
-              for (let j = 0; j < playersByPosition[requiredPosition].length; j++) { //
-                  const player = playersByPosition[requiredPosition][j]; //
-                  if (!playerAddedToTeam.has(player.name)) { //
-                      teams[teamToFill].push(player); //
-                      playerAddedToTeam.add(player.name); //
-                      playerFound = true; //
-                      break; //
+              let playerFound = false;
+              for (let j = 0; j < playersByPosition[requiredPosition].length; j++) {
+                  const player = playersByPosition[requiredPosition][j];
+                  if (!playerAddedToTeam.has(player.name)) {
+                      teams[teamToFill].push(player);
+                      playerAddedToTeam.add(player.name);
+                      playerFound = true;
+                      break;
                   }
               }
 
-              // Se não encontrou um jogador para a posição específica, pega o próximo disponível em ordem de prioridade
-              if (!playerFound) { //
-                  const availablePlayers = selectedPlayers.filter(p => !playerAddedToTeam.has(p.name)) //
-                                                          .sort((a,b) => positionPriority[a.position] - positionPriority[b.position] || a.birthYear - b.birthYear); //
+              if (!playerFound) {
+                  const availablePlayers = selectedPlayers.filter(p => !playerAddedToTeam.has(p.name))
+                                                          .sort((a,b) => positionPriority[a.position] - positionPriority[b.position] || a.birthYear - b.birthYear);
 
-                  if (availablePlayers.length > 0) { //
-                      teams[teamToFill].push(availablePlayers[0]); //
-                      playerAddedToTeam.add(availablePlayers[0].name); //
+                  if (availablePlayers.length > 0) {
+                      teams[teamToFill].push(availablePlayers[0]);
+                      playerAddedToTeam.add(availablePlayers[0].name);
                   }
               }
           }
-          currentTeamForSchema++; // Avança para o próximo time inicial na próxima rodada
+          currentTeamForSchema++;
       }
 
-      // Distribui os jogadores restantes (se houver)
-      const remainingPlayers = selectedPlayers.filter(p => !playerAddedToTeam.has(p.name)) //
-                                              .sort((a,b) => positionPriority[a.position] - positionPriority[b.position] || a.birthYear - b.birthYear); //
+      const remainingPlayers = selectedPlayers.filter(p => !playerAddedToTeam.has(p.name))
+                                              .sort((a,b) => positionPriority[a.position] - positionPriority[b.position] || a.birthYear - b.birthYear);
 
-      for (const player of remainingPlayers) { //
-          // Encontra o time com menos jogadores
-          let minPlayers = Infinity; //
-          let targetTeamIndex = -1; //
-          for (let i = 0; i < numTeams; i++) { //
-              if (teams[i].length < minPlayers) { //
-                  minPlayers = teams[i].length; //
-                  targetTeamIndex = i; //
+      for (const player of remainingPlayers) {
+          let minPlayers = Infinity;
+          let targetTeamIndex = -1;
+          for (let i = 0; i < numTeams; i++) {
+              if (teams[i].length < minPlayers) {
+                  minPlayers = teams[i].length;
+                  targetTeamIndex = i;
               }
           }
-          if (targetTeamIndex !== -1) { //
-              teams[targetTeamIndex].push(player); //
+          if (targetTeamIndex !== -1) {
+              teams[targetTeamIndex].push(player);
           }
       }
 
-      window.currentTeams = teams; //
+      window.currentTeams = teams;
 
-      const display = document.getElementById("teamsDisplay"); //
-      display.innerHTML = ""; //
+      const display = document.getElementById("teamsDisplay");
+      display.innerHTML = "";
 
-      teams.forEach((team, i) => { //
-        const teamNameInput = document.getElementById(`teamName${i + 1}`); //
-        const teamName = teamNameInput && teamNameInput.value.trim() !== "" ? teamNameInput.value.trim() : `Time ${i + 1}`; //
+      teams.forEach((team, i) => {
+        const teamNameInput = document.getElementById(`teamName${i + 1}`);
+        const teamName = teamNameInput && teamNameInput.value.trim() !== "" ? teamNameInput.value.trim() : `Time ${i + 1}`;
 
-        // Ordena os jogadores do time pela posição para exibição
-        const sortedTeam = [...team].sort((a, b) => positionPriority[a.position] - positionPriority[b.position] || a.name.localeCompare(b.name)); //
-        const div = document.createElement("div"); //
-        div.className = "team"; //
-        div.innerHTML = `<strong>${teamName}</strong><br>` + //
-                        sortedTeam.map(p => `${p.name} (${p.position}) - ${calculateAge(p.birthYear)} anos`).join('<br>'); //
-        display.appendChild(div); //
+        const sortedTeam = [...team].sort((a, b) => positionPriority[a.position] - positionPriority[b.position] || a.name.localeCompare(b.name));
+        const div = document.createElement("div");
+        div.className = "team";
+        div.innerHTML = `<strong>${teamName}</strong><br>` +
+                        sortedTeam.map(p => `${p.name} (${p.position}) - ${calculateAge(p.birthYear)} anos`).join('<br>');
+        display.appendChild(div);
       });
     }
 
@@ -449,36 +523,34 @@
         return;
       }
 
-      let message = "🏆 Escalação dos Times:\n\n"; //
-      const positionOrder = { //
-        "Goleiro": 1, //
-        "Zagueiro": 2, //
-        "Lateral": 3, //
-        "Meio": 4, //
-        "Ataque": 5 //
+      let message = "🏆 Escalação dos Times:\n\n";
+      const positionOrder = {
+        "Goleiro": 1,
+        "Zagueiro": 2,
+        "Lateral": 3,
+        "Meio": 4,
+        "Ataque": 5
       };
 
-      window.currentTeams.forEach((team, i) => { //
-        const teamNameInput = document.getElementById(`teamName${i + 1}`); //
-        const teamName = teamNameInput && teamNameInput.value.trim() !== "" ? teamNameInput.value.trim() : `Time ${i + 1}`; //
+      window.currentTeams.forEach((team, i) => {
+        const teamNameInput = document.getElementById(`teamName${i + 1}`);
+        const teamName = teamNameInput && teamNameInput.value.trim() !== "" ? teamNameInput.value.trim() : `Time ${i + 1}`;
 
-        message += `*${teamName}*\n`; //
-        // Ordena os jogadores do time pela posição antes de adicioná-los à mensagem
-        const sortedTeam = [...team].sort((a, b) => positionOrder[a.position] - positionOrder[b.position]); //
+        message += `*${teamName}*\n`;
+        const sortedTeam = [...team].sort((a, b) => positionOrder[a.position] - positionOrder[b.position]);
 
-        sortedTeam.forEach(p => { //
-          message += `- ${p.name} (${p.position})\n`; //
+        sortedTeam.forEach(p => {
+          message += `- ${p.name} (${p.position})\n`;
         });
-        message += "\n"; //
+        message += "\n";
       });
 
-      const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`; //
-      window.open(whatsappUrl, '_blank'); //
+      const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+      window.open(whatsappUrl, '_blank');
     }
 
     document.getElementById("csvFileInput").addEventListener("change", handleFileSelect);
   </script>
-
   
   <!-- Registro do Service Worker -->
   <script>
