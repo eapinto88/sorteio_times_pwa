@@ -1,20 +1,64 @@
 {
-  "name": "Sorteio de Times",
+  "name": "Sorteio de Times - Futebol Arte",
   "short_name": "Sortear Times",
-  "start_url": "/sorteio_times_pwa/",
+  "description": "Aplicativo para sortear times de futebol de forma balanceada",
+  "start_url": "./",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#f2f2f2",
   "theme_color": "#000099",
+  "scope": "./",
+  "categories": ["sports", "utilities"],
+  "lang": "pt-BR",
+  "dir": "ltr",
   "icons": [
+    {
+      "src": "icon-72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "any"
+    },
     {
       "src": "icon-192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "any"
     },
     {
       "src": "icon-512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
