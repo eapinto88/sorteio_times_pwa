@@ -1,4 +1,3 @@
-
 self.addEventListener('install', function (event) {
   event.waitUntil(
     caches.open('sorteio-cache-v1').then(function (cache) {
@@ -7,7 +6,7 @@ self.addEventListener('install', function (event) {
         './index.html',
         './manifest.json',
         './icon-192.png',
-        './icon-512.png'
+        './icon-512.png',
         './campo-fundo.png',
         './logo.png'
       ]);
